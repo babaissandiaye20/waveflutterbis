@@ -1,0 +1,38 @@
+name: waveflutter
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  flutter_contacts: ^1.1.7+1
+  shared_preferences: ^2.2.2
+  provider: ^6.1.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.14.1  # Notez la version mise à jour
+  image_picker: ^0.8.7+3
+  dio: ^5.0.0  
+ 
+
+# Cette section doit être au même niveau que 'dependencies' (pas d'indentation supplémentaire)
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/kaneki.jpg"
+  adaptive_icon_background: "#ffffff" # optionnel: couleur de fond pour Android adaptive icons
+  adaptive_icon_foreground: "assets/kaneki.jpg" # optionnel: pour Android adaptive icons
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/kaneki.jpg
