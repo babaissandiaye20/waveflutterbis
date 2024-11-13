@@ -4,6 +4,7 @@ import 'widgets-transfer-modal/frequency_dropdown.dart';
 import 'widgets-transfer-modal/transfer_form.dart';
 import 'widgets-transfer-modal/user_list.dart';
 import 'package:waveflutter/models/contact.dart';
+import 'package:waveflutter/services/transfer_service.dart';
 
 // Définir le type pour le callback de sélection de contact
 typedef ContactSelectionCallback = void Function(Contact);
@@ -12,21 +13,23 @@ class TransferModal extends StatefulWidget {
   final String token;
   final Function onAuthError;
   final Function updateBalance;
+   final TransferService transferService;
 
   const TransferModal({
     Key? key,
     required this.token,
     required this.onAuthError,
     required this.updateBalance,
+    required this.transferService,
   }) : super(key: key);
 
   @override
   State<TransferModal> createState() => _TransferModalState();
 }
 
-class _TransferModalState extends State<TransferModal>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _TransferModalState extends State<TransferModal> with SingleTickerProviderStateMixin {
+  final GlobalKey<TransferFormState> _transferFormKey = GlobalKey<TransferFormState>();
+   late TabController _tabController;
   late TextEditingController _amountController;
   late TextEditingController _motifController;
   DateTime selectedDate = DateTime.now().add(const Duration(days: 1)); // Initialisation directe
@@ -59,25 +62,14 @@ class _TransferModalState extends State<TransferModal>
     setState(() => isLoading = false);
   }
 
-// Dans TransferModal
-void _performTransfer(bool isScheduled) async {
-  await TransferForm.performTransfer(
-    isScheduled,
-    contacts,
-    _amountController.text,
-    _motifController.text,
-    selectedDate,
-    selectedTime,
-    selectedFrequency,
-    paysFees,
-    widget.token,  // Passez le token ici
-    widget.onAuthError,
-    widget.updateBalance,
-    (message) => _showError(message),
-    (message) => _showSuccess(message),
-  );
-}
-  void _showError(String message) {
+
+  // ...
+
+  void _performTransfer(bool isScheduled) {
+    _transferFormKey.currentState?.initiateTransfer();
+  }
+
+   void _showError(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -98,6 +90,7 @@ void _performTransfer(bool isScheduled) async {
     );
   }
 
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -131,18 +124,21 @@ void _performTransfer(bool isScheduled) async {
     );
   } 
 
-  Widget _buildTransferTab(bool isScheduled) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TransferForm(
+ Widget _buildTransferTab(bool isScheduled) {
+  return SingleChildScrollView(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TransferForm(
+          key: _transferFormKey,
           amountController: _amountController,
           motifController: _motifController,
           paysFees: paysFees,
           togglePaysFees: (value) => setState(() => paysFees = value),
-          token: widget.token, // Ajout du token ici
+          token: widget.token,
+          transferService: widget.transferService,
+          contacts: contacts,  // Ajout de cette ligne
         ),
           if (isScheduled) ...[
             DateTimePickers(

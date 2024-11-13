@@ -71,7 +71,7 @@ void _register() async {
 
         var request = http.MultipartRequest(
           'POST',
-          Uri.parse('http://192.168.1.25:8000/api/utilisateurs')
+          Uri.parse('http:/192.168.6.144:8000/api/utilisateurs')
         );
         
         request.fields.addAll(nonNullData);

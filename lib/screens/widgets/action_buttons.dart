@@ -1,9 +1,17 @@
+
 // widgets/action_buttons.dart
 import 'package:flutter/material.dart';
 import 'transfer_modal/transfer_modal.dart';
+import 'package:waveflutter/services/transfer_service.dart';
+import 'package:waveflutter/services/interfaces/IHttpClient.dart';
+import 'package:waveflutter/services/ApiService.dart';
 
 class ActionButtons extends StatelessWidget {
-  const ActionButtons({Key? key}) : super(key: key);
+  final TransferService transferService;
+
+  ActionButtons({Key? key, required IHttpClient httpClient})
+      : transferService = TransferService(),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,25 +74,23 @@ class ActionButtons extends StatelessWidget {
     );
   }
 
- void _showTransferModal(BuildContext context) {
-  const token = 'yourToken'; // ou récupérez le token de la manière appropriée
+  void _showTransferModal(BuildContext context) {
+    const token = 'yourToken'; // ou récupérez le token de la manière appropriée
 
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (context) => TransferModal(
-      token: token,
-      onAuthError: () {
-        Navigator.pop(context);
-      },
-      updateBalance: () {
-        // Logique pour mettre à jour le solde après un transfert
-        print('Solde mis à jour');
-      },
-    ),
-  );
-}
-
-
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => TransferModal(
+        token: token,
+        onAuthError: () {
+          Navigator.pop(context);
+        },
+        updateBalance: () {
+          print('Solde mis à jour');
+        },
+        transferService: transferService,
+      ),
+    );
+  }
 }

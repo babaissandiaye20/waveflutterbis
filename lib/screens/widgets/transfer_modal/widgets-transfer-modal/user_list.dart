@@ -62,7 +62,7 @@ class UserList extends StatelessWidget {
           .toList();
 
       final response = await http.post(
-        Uri.parse('http://192.168.1.25:8000/api/verify-accounts'),
+        Uri.parse('http://192.168.6.144:8000/api/verify-accounts'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

@@ -53,7 +53,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       }
 
       final response = await http.get(
-        Uri.parse('http://192.168.1.25:8000/api/compte-info'),
+        Uri.parse('http://192.168.6.144:8000/api/compte-info'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',

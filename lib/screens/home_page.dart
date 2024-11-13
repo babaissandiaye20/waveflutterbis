@@ -3,13 +3,18 @@ import 'widgets/header_widget.dart';
 import 'widgets/qr_buttons.dart';
 import 'widgets/action_buttons.dart';
 import 'widgets/transactions_section.dart';
-import 'widgets/transfer_modal/transfer_modal.dart';
+import 'package:waveflutter/services/interfaces/IHttpClient.dart';
+import 'package:waveflutter/services/ApiService.dart';
+import 'package:waveflutter/services/HttpClient.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final httpClient = HttpClient(); // Utilisez l'implémentation concrète
+    final apiService =ApiService(httpClient); // Passez une instance de IHttpClient
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -23,17 +28,17 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        child: const SafeArea(
+        child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              HeaderWidget(),
-              SizedBox(height: 20),
-              QRButtons(),
-              SizedBox(height: 20),
-              ActionButtons(),
-              SizedBox(height: 20),
-              Expanded(child: TransactionsSection()),
+              const HeaderWidget(),
+              const SizedBox(height: 20),
+              const QRButtons(),
+              const SizedBox(height: 20),
+              ActionButtons(httpClient: httpClient), // Passez httpClient ici
+              const SizedBox(height: 20),
+              const Expanded(child: TransactionsSection()),
             ],
           ),
         ),
@@ -45,7 +50,8 @@ class HomePage extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-          BottomNavigationBarItem(icon: Icon(Icons.refresh), label: 'Historique'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.refresh), label: 'Historique'),
           BottomNavigationBarItem(icon: Icon(Icons.send), label: 'Transfert'),
           BottomNavigationBarItem(icon: Icon(Icons.share), label: 'Partager'),
         ],

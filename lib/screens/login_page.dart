@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
         final pin = _pinControllers.map((c) => c.text).join();
         
         final response = await http.post(
-          Uri.parse('http://192.168.1.25:8000/api/login'),
+          Uri.parse('http://192.168.6.144:8000/api/login'),
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
